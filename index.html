@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido Especial ✨</title>
+
+<style>
+:root{
+  --preto:#0f0f0f;
+  --dourado1:#d4af37;
+  --dourado2:#f6e27a;
+  --dourado3:#b8860b;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Georgia', serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--preto),#1a1a1a);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+
+/* PARTÍCULAS DOURADAS */
+.particulas span{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:radial-gradient(circle,var(--dourado2),transparent);
+  border-radius:50%;
+  opacity:0.6;
+  animation:subir linear infinite;
+}
+
+@keyframes subir{
+  from{transform:translateY(100vh);}
+  to{transform:translateY(-10vh);}
+}
+
+/* CARTA */
+.card{
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(12px);
+  padding:55px;
+  width:90%;
+  max-width:650px;
+  border-radius:30px;
+  border:2px solid var(--dourado1);
+  box-shadow:
+    0 0 30px rgba(212,175,55,0.7),
+    0 20px 60px rgba(0,0,0,0.8);
+  text-align:center;
+  animation:entrar 1.5s ease;
+  position:relative;
+}
+
+@keyframes entrar{
+  from{opacity:0; transform:translateY(70px) scale(0.85);}
+  to{opacity:1; transform:translateY(0) scale(1);}
+}
+
+h1{
+  margin-bottom:25px;
+  font-size:26px;
+  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.texto{
+  font-size:18px;
+  min-height:120px;
+  margin-bottom:25px;
+  line-height:1.6;
+}
+
+/* BOTÕES */
+button{
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  font-weight:bold;
+  margin:10px;
+  transition:0.3s;
+}
+
+.sim{
+  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  color:black;
+}
+
+.sim:hover{
+  transform:scale(1.1);
+}
+
+.nao{
+  background:#ffffff20;
+  color:white;
+  position:relative;
+}
+
+.final{
+  font-size:22px;
+  margin-top:20px;
+  animation:fadeIn 1.5s ease forwards;
+  opacity:0;
+  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+@keyframes fadeIn{
+  to{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="particulas"></div>
+
+<div class="card">
+  <h1>Existe algo que eu preciso te perguntar ✨</h1>
+  <div class="texto" id="texto"></div>
+  <div id="botoes">
+    <button id="continuar" onclick="proximaFrase()" class="sim">Continuar 💛</button>
+  </div>
+  <div id="finalMsg"></div>
+</div>
+
+<script>
+
+/* PARTÍCULAS */
+const particulas = document.querySelector(".particulas");
+for(let i=0;i<60;i++){
+  let span=document.createElement("span");
+  span.style.left=Math.random()*100+"vw";
+  span.style.animationDuration=(8+Math.random()*6)+"s";
+  particulas.appendChild(span);
+}
+
+/* FRASES */
+const frases=[
+"Desde que você entrou na minha vida...",
+"Tudo ganhou um novo significado.",
+"Cada momento ao seu lado é valioso.",
+"E eu não quero mais imaginar meus dias sem você..."
+];
+
+let index = 0;
+let escrevendo = false;
+const texto = document.getElementById("texto");
+const continuarBtn = document.getElementById("continuar");
+const botoes = document.getElementById("botoes");
+const finalMsg = document.getElementById("finalMsg");
+
+function digitarFrase(frase){
+    escrevendo = true;
+    texto.innerHTML = "";
+    let char = 0;
+
+    function escrever(){
+        if(char < frase.length){
+            texto.innerHTML += frase.charAt(char);
+            char++;
+            setTimeout(escrever, 35);
+        } else {
+            escrevendo = false;
+        }
+    }
+    escrever();
+}
+
+function proximaFrase(){
+    if(escrevendo) return;
+
+    if(index < frases.length){
+        digitarFrase(frases[index]);
+        index++;
+    } else {
+        mostrarPedido();
+    }
+}
+
+function mostrarPedido(){
+    texto.innerHTML = "Você aceita namorar comigo? 💍✨";
+    continuarBtn.style.display="none";
+
+    botoes.innerHTML = `
+        <button class="sim" onclick="aceitou()">SIM 💛</button>
+        <button class="nao" onmouseover="fugir(this)">NÃO 😅</button>
+    `;
+}
+
+function fugir(btn){
+    btn.style.position="absolute";
+    btn.style.top=Math.random()*200+"px";
+    btn.style.left=Math.random()*200+"px";
+}
+
+function aceitou(){
+    botoes.style.display="none";
+    finalMsg.innerHTML="<div class='final'>Agora é oficial ✨💛<br>Você é minha namorada!</div>";
+}
+
+</script>
+
+</body>
+</html>
