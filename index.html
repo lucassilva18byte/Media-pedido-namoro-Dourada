@@ -7,10 +7,11 @@
 
 <style>
 :root{
-  --preto:#0f0f0f;
-  --dourado1:#d4af37;
-  --dourado2:#f6e27a;
-  --dourado3:#b8860b;
+  --bg1:#0c0c0c;
+  --bg2:#1a1a1a;
+  --gold1:#c6a84f;
+  --gold2:#f5e6b3;
+  --gold3:#8f6b1f;
 }
 
 *{
@@ -23,7 +24,7 @@
 body{
   height:100vh;
   overflow:hidden;
-  background:linear-gradient(135deg,var(--preto),#1a1a1a);
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
   display:flex;
   justify-content:center;
   align-items:center;
@@ -33,11 +34,11 @@ body{
 /* PARTÍCULAS DOURADAS */
 .particulas span{
   position:absolute;
-  width:4px;
-  height:4px;
-  background:radial-gradient(circle,var(--dourado2),transparent);
+  width:3px;
+  height:3px;
+  background:radial-gradient(circle,var(--gold2),transparent);
   border-radius:50%;
-  opacity:0.6;
+  opacity:0.7;
   animation:subir linear infinite;
 }
 
@@ -46,32 +47,48 @@ body{
   to{transform:translateY(-10vh);}
 }
 
+/* CORAÇÕES DOURADOS ATRÁS */
+.coracao{
+  position:absolute;
+  color:rgba(212,175,55,0.6);
+  font-size:20px;
+  animation:flutuar linear infinite;
+  text-shadow:0 0 15px rgba(212,175,55,0.8);
+  z-index:0;
+}
+
+@keyframes flutuar{
+  from{transform:translateY(100vh) scale(1);}
+  to{transform:translateY(-10vh) scale(1.5);}
+}
+
 /* CARTA */
 .card{
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(12px);
+  position:relative;
+  z-index:2;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(15px);
   padding:55px;
   width:90%;
   max-width:650px;
   border-radius:30px;
-  border:2px solid var(--dourado1);
+  border:2px solid var(--gold1);
   box-shadow:
-    0 0 30px rgba(212,175,55,0.7),
-    0 20px 60px rgba(0,0,0,0.8);
+    0 0 40px rgba(198,168,79,0.6),
+    0 20px 60px rgba(0,0,0,0.9);
   text-align:center;
   animation:entrar 1.5s ease;
-  position:relative;
 }
 
 @keyframes entrar{
-  from{opacity:0; transform:translateY(70px) scale(0.85);}
+  from{opacity:0; transform:translateY(70px) scale(0.9);}
   to{opacity:1; transform:translateY(0) scale(1);}
 }
 
 h1{
   margin-bottom:25px;
   font-size:26px;
-  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  background:linear-gradient(90deg,var(--gold3),var(--gold2));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -95,7 +112,7 @@ button{
 }
 
 .sim{
-  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  background:linear-gradient(90deg,var(--gold3),var(--gold2));
   color:black;
 }
 
@@ -104,7 +121,7 @@ button{
 }
 
 .nao{
-  background:#ffffff20;
+  background:#ffffff15;
   color:white;
   position:relative;
 }
@@ -114,7 +131,7 @@ button{
   margin-top:20px;
   animation:fadeIn 1.5s ease forwards;
   opacity:0;
-  background:linear-gradient(90deg,var(--dourado1),var(--dourado2));
+  background:linear-gradient(90deg,var(--gold3),var(--gold2));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -128,9 +145,10 @@ button{
 <body>
 
 <div class="particulas"></div>
+<div id="coracoes"></div>
 
 <div class="card">
-  <h1>Existe algo que eu preciso te perguntar ✨</h1>
+  <h1>Tem algo muito especial para te perguntar ✨</h1>
   <div class="texto" id="texto"></div>
   <div id="botoes">
     <button id="continuar" onclick="proximaFrase()" class="sim">Continuar 💛</button>
@@ -142,19 +160,33 @@ button{
 
 /* PARTÍCULAS */
 const particulas = document.querySelector(".particulas");
-for(let i=0;i<60;i++){
+for(let i=0;i<70;i++){
   let span=document.createElement("span");
   span.style.left=Math.random()*100+"vw";
-  span.style.animationDuration=(8+Math.random()*6)+"s";
+  span.style.animationDuration=(10+Math.random()*8)+"s";
   particulas.appendChild(span);
 }
+
+/* CORAÇÕES ATRÁS */
+const areaCoracoes=document.getElementById("coracoes");
+function gerarCoracao(){
+  let heart=document.createElement("div");
+  heart.classList.add("coracao");
+  heart.innerHTML="❤";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(18+Math.random()*25)+"px";
+  heart.style.animationDuration=(8+Math.random()*6)+"s";
+  areaCoracoes.appendChild(heart);
+  setTimeout(()=>heart.remove(),12000);
+}
+setInterval(gerarCoracao,900);
 
 /* FRASES */
 const frases=[
 "Desde que você entrou na minha vida...",
-"Tudo ganhou um novo significado.",
-"Cada momento ao seu lado é valioso.",
-"E eu não quero mais imaginar meus dias sem você..."
+"Tudo passou a brilhar diferente.",
+"Cada momento ao seu lado é precioso.",
+"E meu coração já fez a escolha dele..."
 ];
 
 let index = 0;
